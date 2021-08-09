@@ -12,11 +12,13 @@ client.on('ready', () => {
   console.log(`Logado como ${client.user.tag}!`);
 });
 
-client.on('message', message => {
+client.on('message', async message => {
 
   if (message.author.bot) return;
 
   if (message.content == undefined || message.content == null || message.content.length == 0) return;
+
+  message.content = message.content.toLowerCase();
 
   if (message.content.charAt(0) == 'd') {
 
@@ -32,13 +34,12 @@ client.on('message', message => {
 
   } else if (validator.isInt(message.content.charAt(0))) {
 
-    const ultimoIndiceNumero = getUltimoIndiceNumero(message.content);
+    const ultimoIndiceNumero = await getUltimoIndiceNumero(message.content);
 
     const prefixo = message.content.slice(0, ultimoIndiceNumero);
     const sufixo = message.content.slice(ultimoIndiceNumero, message.content.length);
-
-    const sides = sufixo.slice(ultimoIndiceNumero);
-
+    const sides = sufixo.slice(1);
+    
     if(validator.isInt(sides) && parseInt(sides) > 0) {
       console.log(`Rolando ${prefixo} dado(s) de ${sides} lados.`);
       rollDices(message, sides, parseInt(prefixo));
