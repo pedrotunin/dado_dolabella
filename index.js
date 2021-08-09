@@ -16,17 +16,37 @@ client.on('message', message => {
 
   if (message.author.bot) return;
 
-  if (isValid(String(message.content))) {
-    const sides = message.content.slice(1);
+  if (message.content == undefined || message.content == null || message.content.length == 0) return;
+
+  if (message.content.charAt(0) == 'd') {
+
+    if (isValid(String(message.content))) {
+      const sides = message.content.slice(1);
+
+      if(validator.isInt(sides) && parseInt(sides) > 0) {
+        console.log(`Rolando 1 dado de ${sides} lados.`);
+        rollDices(message, sides, 1);
+      }
+
+    }
+
+  } else if (validator.isInt(message.content.charAt(0))) {
+
+    const ultimoIndiceNumero = getUltimoIndiceNumero(message.content);
+
+    const prefixo = message.content.slice(0, ultimoIndiceNumero);
+    const sufixo = message.content.slice(ultimoIndiceNumero, message.content.length);
+
+    const sides = sufixo.slice(1);
 
     if(validator.isInt(sides) && parseInt(sides) > 0) {
-      console.log(`Rolando dado de ${sides} lados.`);
-      rollDice(message, sides);
+      console.log(`Rolando ${prefixo} dado(s) de ${sides} lados.`);
+      rollDices(message, sides, parseInt(prefixo));
     }
-    
+
   }
 
-});
+})
 
 client.on('error', data => {
   console.log('error', data);
@@ -42,12 +62,33 @@ async function isValid(s) {
 
 }
 
-async function rollDice(message, sides) {
+async function rollDices(message, sides, dices) {
   try {
 
-    message.reply(`**\n${String(Math.ceil(Math.random() * sides))}** <- d${sides}`);
+    var sum = 0;
+    var results = [];
+
+    for (var i = 0; i < dices; i++) {
+      var result = Math.ceil(Math.random() * sides);
+      sum += result;
+      results.push(result);
+    }
+
+    message.reply(`**\n${sum}** <- [${results}] ${dices}d${sides}`);
 
   } catch (error) {
     console.log(error);
   }
+}
+
+async function getUltimoIndiceNumero(item) {
+
+  let indice = 0;
+  for(var i = 0; i < item.length; i++) {
+      if (validator.isInt(item[indice])) {
+          indice = i;
+      } else break;
+  }
+  return indice;
+
 }
