@@ -37,7 +37,7 @@ client.on('message', message => {
     const prefixo = message.content.slice(0, ultimoIndiceNumero);
     const sufixo = message.content.slice(ultimoIndiceNumero, message.content.length);
 
-    const sides = sufixo.slice(1);
+    const sides = sufixo.slice(ultimoIndiceNumero);
 
     if(validator.isInt(sides) && parseInt(sides) > 0) {
       console.log(`Rolando ${prefixo} dado(s) de ${sides} lados.`);
