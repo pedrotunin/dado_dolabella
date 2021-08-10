@@ -39,7 +39,7 @@ client.on('message', message => {
 
     const sides = sufixo.slice(ultimoIndiceNumero);
 
-    if(validator.isInt(sides) && parseInt(sides) > 0) {
+    if(sufixo.charAt(0) == 'd' && validator.isInt(sides) && parseInt(sides) > 0) {
       console.log(`Rolando ${prefixo} dado(s) de ${sides} lados.`);
       rollDices(message, sides, parseInt(prefixo));
     }
